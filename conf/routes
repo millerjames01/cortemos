@@ -1,0 +1,3 @@
+# The Main Page
+GET			/						controllers.AppController.index()
+GET			/create					controllers.AppController.create()

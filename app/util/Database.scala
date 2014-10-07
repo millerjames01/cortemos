@@ -1,24 +1,12 @@
 package util
 
 import scala.slick.driver.H2Driver.simple._
-import models.CortosDB._
+import play.api.mvc.{ Action, AnyContent, Request, Result }
 
-
-object DataStoreDemo {
-  def start = {
-	Database.forURL("jdbc:h2:mem:test1", driver = "org.h2.Driver") withSession {
-		implicit session => {
-			cortos.ddl.create
-			cortos ++= 
-			  Seq(
-			    (1, "What's up", "nerd"),
-			    (2, "I'm hungry", "whenIsLunch"),
-			    (3, "Don't be such a nerd", "makeMe")
-			  )
-			  
-			val q1 = for(c <- cortos if c.id == 1) yield c
-			q1.list
-		}
-	}
+object DatabaseAction {
+  val database = Database.forURL("jdbc:h2:database/production", driver = "org.h2.Driver")
+  
+  def apply(f: (Session, Request[_]) => Result): Action[AnyContent] = database.withSession { session =>
+    Action { request => f(session, request) }
   }
 }

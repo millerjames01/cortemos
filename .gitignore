@@ -15,6 +15,7 @@ server.pid
 *.eml
 /dist/
 .cache
+/database/
 
 # scala ide stuff
 .classpath
