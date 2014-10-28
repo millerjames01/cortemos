@@ -4,6 +4,7 @@ import scala.util.{ Try, Success, Failure }
 
 import play.api.mvc._
 import play.api.mvc.BodyParsers.parse
+import play.api.libs.json.Json
 import scala.slick.driver.H2Driver.simple._
 
 import util.{ DatabaseAction, DataValidator }
@@ -26,10 +27,12 @@ object AppController extends Controller {
     checkData match {
       case Success((whiteOnBlack, text, path)) => {
         cortos += (0, text, path, whiteOnBlack, now)
-        Ok("success") // TODO: Return JSON and not a string
+        val jsResp = Json.obj("status" -> "success", "path" -> s"cortemos.com/$path")
+        Ok(jsResp)
       }
       case Failure(e) => {
-        Ok(e.getMessage())
+        val jsResp = Json.obj("status" -> "error", "message" -> (s"Uh oh! ${e.getMessage()}"))
+        Ok(jsResp)
       }
     }
   }
@@ -44,11 +47,14 @@ object AppController extends Controller {
     
     checkData match {
       case Success((whiteOnBlack, text)) => {
-        cortos += (0, text, randomPath, whiteOnBlack, now)
-        Ok("success") // TODO: Return JSON and not a string
+        val path = randomPath
+        cortos += (0, text, path, whiteOnBlack, now)
+        val jsResp = Json.obj("status" -> "success", "path" -> s"cortemos.com/$path")
+        Ok(jsResp)
       }
       case Failure(e) => {
-        Ok(e.getMessage())
+        val jsResp = Json.obj("status" -> "error", "message" -> (s"Uh oh! ${e.getMessage()}"))
+        Ok(jsResp)
       }
     }
   }

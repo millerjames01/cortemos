@@ -14,13 +14,12 @@ object DataValidator {
     
   def jsToString(js: JsValue): Try[String] = js.asOpt[JsString] match {
     case Some(jsstring) => Success(jsstring.value)
-    case None => Failure(new Exception("There was an error in processing the data " +
-                                       "sent to our servers. Sorry!"))           
+    case None => Failure(new Exception(Errors.badJs))           
   }
   
   def checkStyling(styling: String)= styling match {
-    case "b-on-w" => Success(true)
-    case "w-on-b" => Success(false)
+    case "b-on-w" => Success(false)
+    case "w-on-b" => Success(true)
     case _ => Failure(Errors.badStyling)
   }
   
@@ -54,6 +53,8 @@ object DataValidator {
     } yield (stylingAndText._1, stylingAndText._2, cleanPath)
   
   object Errors {
+    val badJs = new Exception("There was an error in processing the data " +
+                               "sent to our servers. Sorry!")
     val badStyling = new Exception("Your request was submitted with an invalid style " +
                                    "choice. Did you modify the content being submitted?")
     val invalidChar = new Exception("Your path contained an invalid character. Try re-entering " +

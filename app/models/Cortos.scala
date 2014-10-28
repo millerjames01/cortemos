@@ -4,7 +4,7 @@ import java.sql.Timestamp
 
 import java.util.Random
 import scala.slick.driver.H2Driver.simple._
-import util.DatabaseAction
+import util.{ Datastore, DatabaseAction }
 
 class Cortos(tag: Tag) extends Table[(Long, String, String, Boolean, Timestamp)](tag, "CORTOS") {
   def id = column[Long]("CORT_ID", O.PrimaryKey, O.AutoInc)
@@ -29,7 +29,7 @@ object Cortos {
     aMonthAgo
   }
   
-  def taken(path: String) = DatabaseAction.database.withSession { implicit session =>
+  def taken(path: String) = Datastore.database.withSession { implicit session =>
     val activePathQ = 
       for {
         c <- cortos
