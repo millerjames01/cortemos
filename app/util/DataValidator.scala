@@ -6,7 +6,7 @@ import play.api.libs.json.{ JsValue, JsString }
 import models.Cortos.taken
 
 object DataValidator {
-  protected val invalidChars = List(
+  val invalidChars = List(
       "/", "!", "#", "$", "%", "@", "*", "(", ")", "^", "&", "+",
       "?", "{", "}", "|", "\\", "\"", "\"", ":", ";", "~", "[", "]",
       "<", ">", ",", ".", "`", " "
@@ -14,7 +14,7 @@ object DataValidator {
     
   def jsToString(js: JsValue): Try[String] = js.asOpt[JsString] match {
     case Some(jsstring) => Success(jsstring.value)
-    case None => Failure(new Exception(Errors.badJs))           
+    case None => Failure(Errors.badJs)           
   }
   
   def checkStyling(styling: String)= styling match {

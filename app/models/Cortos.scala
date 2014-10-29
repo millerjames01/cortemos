@@ -25,7 +25,9 @@ object Cortos {
   def now = new Timestamp(System.currentTimeMillis)
   
   def archivePast = {
-    val aMonthAgo = new Timestamp(System.currentTimeMillis - 30 * 24 * 60 * 60 * 1000)
+    val anHourInMillis: Long = 60 * 60 * 1000
+    val aMonthInMillis: Long = 30 * 24 * anHourInMillis
+    val aMonthAgo = new Timestamp(System.currentTimeMillis - aMonthInMillis)
     aMonthAgo
   }
   
